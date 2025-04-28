@@ -1,0 +1,14 @@
+{
+  "name": "automationteststore-pw",
+  "version": "1.0.0",
+  "description": "Playwright testing for automation test store website",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Ikhsan",
+  "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^9.7.0",
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.2"
+  }
+}
