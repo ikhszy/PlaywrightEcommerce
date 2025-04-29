@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test'
-import { fakerEN, fakerEN_US } from '@faker-js/faker'
+import { test } from '@playwright/test'
 import { pageManager } from '../../page-objects/pageManager'
 import { baseHelper } from '../../page-objects/baseHelper'
 
