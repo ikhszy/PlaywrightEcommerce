@@ -2,6 +2,10 @@ import { expect, Locator, Page } from '@playwright/test'
 import { baseHelper } from './baseHelper'
 
 export class loginRegisterPage extends baseHelper{
+    // reusable variables
+    textAssert: string
+    booleanAssert: boolean
+    
     // account login page variables
     private readonly registerRadio: Locator
     private readonly continueBtn: Locator
@@ -30,6 +34,7 @@ export class loginRegisterPage extends baseHelper{
     private readonly subscribeYRegister: Locator
     private readonly subscribeNRegister: Locator
     private readonly privacyCheckRegister: Locator
+    readonly alertErrorRegister: Locator
     // private readonly continueBtnRegister: Locator --> unused due to same locator as previous
 
     constructor(page: Page){
@@ -63,6 +68,7 @@ export class loginRegisterPage extends baseHelper{
         this.subscribeYRegister = page.locator('#AccountFrm_newsletter1')
         this.subscribeNRegister = page.locator('#AccountFrm_newsletter0')
         this.privacyCheckRegister = page.locator('#AccountFrm_agree')
+        this.alertErrorRegister = page.locator('[class="alert alert-error alert-danger"]')
     }
 
     // account login page method
@@ -169,5 +175,16 @@ export class loginRegisterPage extends baseHelper{
 
     async regPrivacyCheck() {
         await this.privacyCheckRegister.click()
+    }
+
+    async regAlertGetText() {
+        // @ts-ignore
+        this.textAssert = await this.alertErrorRegister.textContent()
+        return this.textAssert
+    }
+
+    async regAlertVisible() {
+        this.booleanAssert = await this.alertErrorRegister.isVisible()
+        return this.booleanAssert
     }
 }
