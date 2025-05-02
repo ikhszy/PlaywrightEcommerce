@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
-import { pageManager } from '../../page-objects/pageManager'
-import { baseHelper } from '../../page-objects/baseHelper'
+import { pageManager } from '../page-objects/pageManager'
+import { baseHelper } from '../page-objects/baseHelper'
 
 test.beforeEach(async({page}) => {
     await page.goto('https://automationteststore.com/')

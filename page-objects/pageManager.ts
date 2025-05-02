@@ -3,6 +3,7 @@ import { NavigationBar } from '../page-objects/navigationBar'
 import { loginRegisterPage } from '../page-objects/loginRegisterPage'
 import { homePage } from './homePage'
 import { itemPage } from './itemPage'
+import { cartPage } from './cartPage'
 
 export class pageManager{
 
@@ -11,6 +12,7 @@ export class pageManager{
     private readonly loginRegisterPage: loginRegisterPage
     private readonly homePage: homePage
     private readonly itemPage: itemPage
+    private readonly cartPage: cartPage
 
     constructor(page: Page) {
         this.page = page
@@ -18,6 +20,7 @@ export class pageManager{
         this.loginRegisterPage = new loginRegisterPage(this.page)
         this.homePage = new homePage(this.page)
         this.itemPage = new itemPage(this.page)
+        this.cartPage = new cartPage(this.page)
     }
 
     nav() {
@@ -34,6 +37,10 @@ export class pageManager{
 
     item() {
         return this.itemPage
+    }
+
+    cart() {
+        return this.cartPage
     }
 
 }
