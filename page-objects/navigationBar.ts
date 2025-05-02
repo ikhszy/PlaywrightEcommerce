@@ -33,6 +33,11 @@ export class NavigationBar {
     private readonly haircareBarMenu: Locator
     private readonly booksBarMenu: Locator
 
+    // language and cart
+    
+    private readonly cartBar: Locator
+    private readonly currencyBar: Locator
+
     constructor(page: Page) {
         this.page = page
         
@@ -55,6 +60,10 @@ export class NavigationBar {
         this.menBarMenu = page.locator('#categorymenu').getByRole('link', { name: 'Men' })
         this.haircareBarMenu = page.locator('#categorymenu').getByRole('link', { name: 'Hair Care' })
         this.booksBarMenu = page.locator('#categorymenu').getByRole('link', { name: 'Books' })
+
+        // currency and cart locator
+        this.currencyBar = page.locator('[class="dropdown-menu currency"]')
+        this.cartBar = page.locator('.cart_total')
 
     }
 
@@ -208,5 +217,18 @@ export class NavigationBar {
                 await this.page.locator('#categorymenu').getByRole('link', { name: arr[i] }).click()
             }
         }
+    }
+
+    // 0 for Euro, 1 for Poundsterling, 2 for Dollar
+    async currencySelector(select: number) {
+        this.currencyBar.locator('li').nth(select).click()
+    }
+
+    async cartBarTotalPrice() {
+        let price = this.cartBar.textContent()
+        // @ts-ignore
+        price.replace('$','')
+        // @ts-ignore
+        return parseFloat(price)
     }
 }
