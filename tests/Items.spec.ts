@@ -42,4 +42,24 @@ test.describe('Items Page Testing', ()=> {
         await expect(itemcartprice * qty).toEqual(totalPrice)
 
     })
+
+    test('Add items with radio and select options', async({page}) => {
+        const pm = new pageManager(page)
+        const bh = new baseHelper(page)
+    
+        // go to shoes page
+        await pm.nav().apparelBarSelection('Shoes')
+
+        // select the first item
+        await pm.item().categoryNameClick(0)
+        
+        // select size (radio)
+        await pm.item().itemRadioClick(2)
+
+        // select colour (comboBox)
+        await pm.item().itemComboSelect('red')
+
+        // add to cart
+        await pm.item().itemCartClick()
+    })
 })
