@@ -59,7 +59,30 @@ test.describe('Items Page Testing', ()=> {
         // select colour (comboBox)
         await pm.item().itemComboSelect('red')
 
-        // add to cart
+         // set the quantity of the item
+         let qty = 5
+         await pm.item().itemQtyFill(qty)
+ 
+         // get the item name
+         let itemName = await pm.item().itemGetName()
+         
+         // get both item base price and total after quantity
+         let basePrice = await pm.item().itemGetBasePrice()
+         await bh.waitForSeconds(2)
+         let totalPrice = await pm.item().itemGetTotalPrice()
+         
+         // assert the total is correct
+         expect(totalPrice).toEqual(basePrice * qty)
+
+        // add to Cart
         await pm.item().itemCartClick()
+
+        // check on cart bar that the item is added
+        let itemNameVs = await pm.cart().cartNameGet(0)
+        await expect (itemName).toContain(itemNameVs)
+
+        // check the cart bar price's
+        let itemcartprice = await pm.cart().cartTotalGet(0)
+        await expect(itemcartprice * qty).toEqual(totalPrice)
     })
 })
