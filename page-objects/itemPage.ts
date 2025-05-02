@@ -6,6 +6,10 @@ export class itemPage extends baseHelper {
     textTarget: string
     numTarget: number
 
+    // category page
+    private readonly categoryItemBase: Locator
+
+    // item page
     private readonly itemHomeBreadcrumb: Locator
     private readonly itemBreadcrumb: Locator
     private readonly itemName: Locator
@@ -28,9 +32,13 @@ export class itemPage extends baseHelper {
     private readonly itemRevCaptchaText: Locator
     private readonly itemRevCaptchaBtn: Locator
     private readonly itemTagstag: Locator
+    private readonly itemOptions: Locator
     
     constructor(page: Page) {
         super(page)
+
+        // category objects locator
+        this.categoryItemBase = page.locator('#maincontainer [class="col-md-3 col-sm-6 col-xs-12"]')
 
         this.itemHomeBreadcrumb = page.locator('.breadcrumbs li').nth(0)
         this.itemBreadcrumb = page.locator('.breadcrumbs li').nth(1)
@@ -48,11 +56,16 @@ export class itemPage extends baseHelper {
         this.itemDescModel = page.locator('.productinfoleft').nth(0)
         this.itemDescManufacturer = page.locator('.productinfoleft img').nth(1)
         this.itemRevName = page.locator('#name')
-        this.itemRevReview = page.locator('#text')
+        this.itemRevReview = page.locator('#text') 
         this.itemRevCaptcha = page.locator('#captcha_img')
         this.itemRevCaptchaText = page.locator('#captcha')
         this.itemRevCaptchaBtn = page.locator('#review_submit')
         this.itemTagstag = page.locator('.tags li')
+        this.itemOptions = page.locator('#product [class="input-group col-sm-10"]')
+    }
+
+    async categoryNameClick(item: number) {
+        await this.categoryItemBase.locator('.prdocutname').nth(item).click()
     }
 
     async itemGetBreadcrumbText() {
@@ -105,5 +118,13 @@ export class itemPage extends baseHelper {
 
     async itemPrintClick() {
         await this.itemPrint.click()
+    }
+
+    async itemRadioClick(select: number) {
+        await this.itemOptions.locator('input').nth(select).click()
+    }
+
+    async itemComboSelect(select: string) {
+        await this.itemOptions.locator('select').selectOption({label: select})
     }
 }

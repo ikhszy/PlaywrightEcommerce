@@ -241,6 +241,4 @@ export class homePage extends baseHelper {
     async brandClick(product: number) {
         await this.brands.nth(product).click()
     }
-
-    
 }
