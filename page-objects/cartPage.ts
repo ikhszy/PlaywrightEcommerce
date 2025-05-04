@@ -15,6 +15,7 @@ export class cartPage extends baseHelper {
     private readonly estimateBtn: Locator
     private readonly shipmentSelect: Locator
     private readonly totalTable: Locator
+    private readonly checkoutBtn: Locator
 
     constructor(page: Page) {
         super(page)
@@ -29,6 +30,7 @@ export class cartPage extends baseHelper {
         this.estimateBtn = page.getByTitle('Estimate')
         this.shipmentSelect = page.locator('#shippings')
         this.totalTable = page.locator('#totals_table tr')
+        this.checkoutBtn = page.locator('#cart_checkout2')
     }
 
     async cartTotalItems() {
@@ -44,7 +46,7 @@ export class cartPage extends baseHelper {
 
     // start with 1 as first item
     async cartTotalGet(item: number) {
-        const cartTblPrice = await this.cartTable.nth(item).locator('.align_right').nth(0)
+        const cartTblPrice = await this.cartTable.nth(item).locator('.align_right').nth(1)
         let priceStr = await cartTblPrice.textContent()
         //@ts-ignore
         priceStr = priceStr?.replaceAll('$', '')
@@ -114,5 +116,17 @@ export class cartPage extends baseHelper {
         retail = retail?.replaceAll('$','')
         //@ts-ignore
         return parseFloat(retail)
+    }
+
+    async cartGetTotalPrice() {
+        let total = await this.page.locator('[class="bold totalamout"]').textContent()
+        //@ts-ignore
+        total = total?.replaceAll('$','')
+        //@ts-ignore
+        return parseFloat(total)
+    }
+
+    async cartCheckoutClick() {
+        await this.checkoutBtn.click()
     }
 }
