@@ -108,8 +108,6 @@ export class itemPage extends baseHelper {
         //@ts-ignore
         this.numTarget = parseFloat(strPrice?.substring(1))
         return this.numTarget
-
-        this.numTarget = 0
     }
 
     async itemCartClick() {

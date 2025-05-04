@@ -1,38 +1,50 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { baseHelper } from './baseHelper'
+import { count } from 'console'
+import { subtle } from 'crypto'
 
 export class cartPage extends baseHelper {
 
     // item table variable
     private readonly cartTable: Locator
-    private readonly cartTblHeader: Locator
-    private readonly cartTblImg: Locator
-    private readonly cartTblName: Locator
-    private readonly cartTblModel: Locator
-    private readonly cartTblPrice: Locator
-    private readonly cartTblQty: Locator
-    private readonly cartTblTotal: Locator
-    private readonly cartTblRemove: Locator
+    private readonly couponText: Locator
+    private readonly couponBtn: Locator
+    private readonly countrySelect: Locator
+    private readonly stateSelect: Locator
+    private readonly zipText: Locator
+    private readonly estimateBtn: Locator
+    private readonly shipmentSelect: Locator
+    private readonly totalTable: Locator
 
     constructor(page: Page) {
         super(page)
 
-        // item table locator
-        this.cartTable = page.locator('#top_cart_product_list')
+        // item locator
+        this.cartTable = page.locator('#cart tr')
+        this.couponText = page.locator('#coupon_coupon')
+        this.couponBtn = page.locator('#apply_coupon_btn')
+        this.countrySelect = page.locator('#estimate_country')
+        this.stateSelect = page.locator('#estimate_country_zones')
+        this.zipText = page.locator('#estimate_postcode')
+        this.estimateBtn = page.getByTitle('Estimate')
+        this.shipmentSelect = page.locator('#shippings')
+        this.totalTable = page.locator('#totals_table tr')
     }
 
     async cartTotalItems() {
-        const totalItems = this.cartTable.locator('.image')
-        return await totalItems.count()
+        const totalItems = this.page.locator('#cart [class="table table-striped table-bordered"] tr')
+        return await totalItems.count() - 1
     }
 
+    // start with 1 as first item
     async cartNameGet(item: number) {
-        const cartTblName = this.cartTable.locator('.name a').nth(item)
-        return await cartTblName.textContent()
+        const cartTblName = this.cartTable.nth(item).locator('.align_left').first()
+        return cartTblName.textContent()
     }
 
+    // start with 1 as first item
     async cartTotalGet(item: number) {
-        const cartTblPrice = await this.cartTable.locator('.total')
+        const cartTblPrice = await this.cartTable.nth(item).locator('.align_right').nth(0)
         let priceStr = await cartTblPrice.textContent()
         //@ts-ignore
         priceStr = priceStr?.replaceAll('$', '')
@@ -40,6 +52,7 @@ export class cartPage extends baseHelper {
         return parseFloat(priceStr);
     }
 
+    // start with 0 as first item
     async cartQtyUpdate(item: number, qty: number) {
         const cartQty = this.page.locator('[class="form-control short"]').nth(item)
         await cartQty.clear()
@@ -47,8 +60,59 @@ export class cartPage extends baseHelper {
         await this.page.locator('#cart_update').click()
     }
 
+    // start with 0 as first item
     async cartRemove(item: number) {
         const cartRemove = this.page.locator('[class="btn btn-sm btn-default"]').nth(item)
         await cartRemove.click()
+    }
+
+    // apply coupon
+    async cartCoupon(coupon: string) {
+        await this.couponText.fill(coupon)
+        await this.couponBtn.click()
+    }
+    
+    async cartCountrySelect(country: string) {
+        await this.countrySelect.selectOption({label: country})
+    }
+
+    async cartStateSelect(state: string) {
+        await this.stateSelect.selectOption({label: state})
+    }
+
+    async cartZipFill(zip: string) {
+        await this.zipText.fill(zip)
+    }
+
+    async cartEstimateClick() {
+        await this.estimateBtn.click()
+    }
+
+    async cartShipmentSelect(shipment: number) {
+        await this.shipmentSelect.selectOption({index: shipment})
+    }
+
+    async cartGetSubtotal() {
+        let subTotal = await this.totalTable.first().locator('td').nth(1).textContent()
+        //@ts-ignore
+        subTotal = subTotal?.replaceAll('$','')
+        //@ts-ignore
+        return parseFloat(subTotal)
+    }
+
+    async cartGetShipRate() {
+        let shiprate = await this.totalTable.nth(1).locator('td').nth(1).textContent()
+        //@ts-ignore
+        shiprate = shiprate?.replaceAll('$','')
+        //@ts-ignore
+        return parseFloat(shiprate)
+    }
+
+    async cartGetRetail() {
+        let retail = await this.totalTable.nth(2).locator('td').nth(1).textContent()
+        //@ts-ignore
+        retail = retail?.replaceAll('$','')
+        //@ts-ignore
+        return parseFloat(retail)
     }
 }
