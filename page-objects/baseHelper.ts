@@ -1,8 +1,10 @@
 // @ts-nocheck
-import { expect, Locator, Page } from '@playwright/test'
+import test, { expect, Locator, Page } from '@playwright/test'
 import { fakerEN, fakerEN_US } from '@faker-js/faker'
-import test from 'node:test'
-const testData = JSON.parse(JSON.stringify(require('../test-data/registerUser.json')))
+import * as excel from 'exceljs'
+import * as fs from 'fs'
+const testDataJson = JSON.parse(JSON.stringify(require('../test-data/registerUser.json')))
+
 
 export class baseHelper{
     readonly page: Page
@@ -22,6 +24,12 @@ export class baseHelper{
     country: string
     loginname: string
     password: string
+
+    // Shirts data variables
+    shirtName: string
+    shirtPrice: string
+    shirtOpt1: string
+    shirtOpt2: string
 
     constructor(page: Page) {
         this.page = page
@@ -69,17 +77,30 @@ export class baseHelper{
     }
 
     async getRegisterDataJSON() {
-        this.firstname = testData.firstname
-        this.lastname = testData.lastname
-        this.email = testData.email
-        this.phone = testData.phone
-        this.company = testData.company
-        this.address1 = testData.address1
-        this.city = testData.city
-        this.zipcode = testData.zipcode
-        this.country = testData.country
-        this.state = testData.state
-        this.loginname = testData.loginname
-        this.password = testData.password
+        this.firstname = testDataJson.firstname
+        this.lastname = testDataJson.lastname
+        this.email = testDataJson.email
+        this.phone = testDataJson.phone
+        this.company = testDataJson.company
+        this.address1 = testDataJson.address1
+        this.city = testDataJson.city
+        this.zipcode = testDataJson.zipcode
+        this.country = testDataJson.country
+        this.state = testDataJson.state
+        this.loginname = testDataJson.loginname
+        this.password = testDataJson.password
+    }
+
+    async getItemExcel() {
+        // setup for data
+        const workbook = new excel.Workbook()
+
+        await workbook.xlsx.readFile("C:\\Users\\Muhammad Ikhsan\\Documents\\AutomationTestStore-PW\\test-data\\pw-dataprovider.xlsx")
+        const worksheet = workbook.getWorksheet('shirts')
+        var row = worksheet?.getRow(2)
+        console.log(row?.getCell(1).value)
+
+        // set the date --> variables
+        this.shirtName = row?.getCell(1).value
     }
 }
