@@ -85,4 +85,22 @@ test.describe('Items Page Testing', ()=> {
         let itemcartprice = await pm.cart().cartTotalGet(0)
         await expect(itemcartprice * qty).toEqual(totalPrice)
     })
+
+    test('add items from json file', async({page}) => {
+        const pm = new pageManager(page)
+        const bh = new baseHelper(page)
+
+        // initialize test data
+        const shoesData = JSON.parse(JSON.stringify(require('../test-data/productsList.json')))
+
+        // search for product
+        await pm.nav().searchBar(shoesData.Shoes[1].name)
+
+        // set the selection
+        await pm.item().itemComboSelect(shoesData.Shoes[1].size)
+
+        // let's compare price
+        let jsonprice = (shoesData.Shoes[1].price).replaceAll('$','')
+        expect(await pm.item().itemGetBasePrice()).toEqual(parseFloat(jsonprice))
+    })
 })

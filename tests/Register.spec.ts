@@ -40,6 +40,36 @@ test.describe('Register function test suite', () => {
         await pm.lgn().continueBtnClick()
     })
 
+    test('register with data from JSON', async({page}) => {
+        const pm = new pageManager(page)
+        const bh = new baseHelper(page)
+
+        // open registration form
+        await pm.lgn().continueBtnClick()
+        await page.waitForTimeout(2000)
+    
+        // get json test data
+        bh.getRegisterDataJSON()
+
+        // filling the form
+        await pm.lgn().regFirstName(bh.firstname)
+        await pm.lgn().regLastName(bh.lastname)
+        await pm.lgn().regEmail(bh.email)
+        await pm.lgn().regTelephone(bh.phone)
+        await pm.lgn().regCompany(bh.company)
+        await pm.lgn().regAddress1(bh.address1)
+        await pm.lgn().regCity(bh.city)
+        await pm.lgn().regZipcode(bh.zipcode)
+        await pm.lgn().regCountrySelect(bh.country)
+        await pm.lgn().regStateSelect(bh.state)
+        await pm.lgn().regLoginname(bh.loginname)
+        await pm.lgn().regPassword(bh.password)
+        await pm.lgn().regPasswordConfirm(bh.password)
+        await pm.lgn().regSubscribe(0)
+        await pm.lgn().regPrivacyCheck()
+        await pm.lgn().continueBtnClick()
+    })
+
     test('Register failed - firstname empty', async({page}) => {
         const pm = new pageManager(page)
         const bh = new baseHelper(page)

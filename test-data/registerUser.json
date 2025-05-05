@@ -1,0 +1,17 @@
+{
+    "firstname": "John",
+    "lastname": "Jones",
+    "email": "johnjonestesting@mail.com",
+    "phone": "091187654321",
+    "fax": "091187654322",
+    "company": "DriverMethod",
+    "address1": "this is address1",
+    "address2": "this is address2",
+    "city": "Tinsel City",
+    "state": "California",
+    "zipcode": "90015",
+    "country": "United States",
+    "loginname": "johnJoneslogin",
+    "password": "pass123!",
+    "subscribe": 0
+}
