@@ -91,16 +91,15 @@ export class baseHelper{
         this.password = testDataJson.password
     }
 
-    async getItemExcel() {
+    async getItemExcel(rownum: number, rowcol: number) {
         // setup for data
         const workbook = new excel.Workbook()
 
         await workbook.xlsx.readFile("C:\\Users\\Muhammad Ikhsan\\Documents\\AutomationTestStore-PW\\test-data\\pw-dataprovider.xlsx")
         const worksheet = workbook.getWorksheet('shirts')
-        var row = worksheet?.getRow(2)
-        console.log(row?.getCell(1).value)
+        var row = worksheet?.getRow(rownum)
 
-        // set the date --> variables
-        this.shirtName = row?.getCell(1).value
+        // return value based on column and row
+        return row?.getCell(rowcol).value
     }
 }

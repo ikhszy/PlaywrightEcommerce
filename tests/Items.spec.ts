@@ -108,9 +108,10 @@ test.describe('Items Page Testing', ()=> {
         const bh = new baseHelper(page)
 
         // set the test data
-        await bh.getItemExcel()
+        let itemname = await bh.getItemExcel(2, 1) // --> get shirts name
 
         // search using the item name
-        await pm.nav().searchBar(bh.shirtName)
+        //@ts-ignore
+        await pm.nav().searchBar(itemname)
     })
 })
