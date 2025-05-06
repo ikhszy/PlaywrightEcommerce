@@ -91,6 +91,11 @@ export class baseHelper{
         this.password = testDataJson.password
     }
 
+    async getLoginDataJson() {
+        this.loginname = testDataJson.loginname
+        this.password = testDataJson.password
+    }
+
     async getItemExcel(rownum: number, rowcol: number) {
         // setup for data
         const workbook = new excel.Workbook()
