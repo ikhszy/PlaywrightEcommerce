@@ -35,7 +35,7 @@ export class loginRegisterPage extends baseHelper{
     private readonly subscribeNRegister: Locator
     private readonly privacyCheckRegister: Locator
     readonly alertErrorRegister: Locator
-    // private readonly continueBtnRegister: Locator --> unused due to same locator as previous
+    readonly alertSuccessRegister: Locator
 
     constructor(page: Page){
         super(page)
@@ -45,8 +45,8 @@ export class loginRegisterPage extends baseHelper{
         this.continueBtn = page.locator('button').getByText('Continue')
         this.loginText = page.locator('#loginFrm_loginname')
         this.passwordText = page.locator('#loginFrm_password')
-        this.forgotPass = page.locator('.loginbox form-horizontal').getByRole('link', {name: 'Forgot your password?'})
-        this.forgotLogin = page.locator('.loginbox form-horizontal').getByRole('link', {name: 'Forgot your login?'})
+        this.forgotPass = page.getByRole('link', {name: 'Forgot your password?'})
+        this.forgotLogin = page.getByRole('link', {name: 'Forgot your login?'})
         this.loginBtn = page.getByRole('button', {name: 'Login'})
 
         // register form locators
@@ -69,6 +69,7 @@ export class loginRegisterPage extends baseHelper{
         this.subscribeNRegister = page.locator('#AccountFrm_newsletter0')
         this.privacyCheckRegister = page.locator('#AccountFrm_agree')
         this.alertErrorRegister = page.locator('[class="alert alert-error alert-danger"]')
+        this.alertSuccessRegister = page.locator('[class="alert alert-success"]')
     }
 
     // account login page method
@@ -177,14 +178,25 @@ export class loginRegisterPage extends baseHelper{
         await this.privacyCheckRegister.click()
     }
 
-    async regAlertGetText() {
+    async regErrAlertGetText() {
         // @ts-ignore
         this.textAssert = await this.alertErrorRegister.textContent()
         return this.textAssert
     }
 
-    async regAlertVisible() {
+    async regErrAlertVisible() {
         this.booleanAssert = await this.alertErrorRegister.isVisible()
+        return this.booleanAssert
+    }
+
+    async regScsAlertGetText() {
+        // @ts-ignore
+        this.textAssert = await this.alertSuccessRegister.textContent()
+        return this.textAssert
+    }
+
+    async regScsAlertVisible() {
+        this.booleanAssert = await this.alertSuccessRegister.isVisible()
         return this.booleanAssert
     }
 }
