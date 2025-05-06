@@ -19,7 +19,7 @@ test.describe('Register function test suite', () => {
         await page.waitForTimeout(2000)
     
         // generate test data from baseHelper
-        bh.generateRegisterData()
+        await bh.generateRegisterData()
     
         // filling the form
         await pm.lgn().regFirstName(bh.firstname)
@@ -44,12 +44,11 @@ test.describe('Register function test suite', () => {
         const pm = new pageManager(page)
         const bh = new baseHelper(page)
 
+        // generate data from faker and put it to the json file
+        await bh.writeRegisterToJson()
+
         // open registration form
         await pm.lgn().continueBtnClick()
-        await page.waitForTimeout(2000)
-    
-        // get json test data
-        bh.getRegisterDataJSON()
 
         // filling the form
         await pm.lgn().regFirstName(bh.firstname)
@@ -67,6 +66,8 @@ test.describe('Register function test suite', () => {
         await pm.lgn().regPasswordConfirm(bh.password)
         await pm.lgn().regSubscribe(0)
         await pm.lgn().regPrivacyCheck()
+
+        await bh.waitForSeconds(5)
         await pm.lgn().continueBtnClick()
     })
 

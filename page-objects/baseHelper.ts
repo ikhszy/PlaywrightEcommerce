@@ -1,9 +1,9 @@
 // @ts-nocheck
 import test, { expect, Locator, Page } from '@playwright/test'
-import { fakerEN, fakerEN_US } from '@faker-js/faker'
+import { fa, faker, fakerEN, fakerEN_US } from '@faker-js/faker'
 import * as excel from 'exceljs'
 import * as fs from 'fs'
-const testDataJson = JSON.parse(JSON.stringify(require('../test-data/registerUser.json')))
+const testDataJson = JSON.parse(JSON.stringify(require('../test-data/userData.json')))
 
 
 export class baseHelper{
@@ -101,5 +101,65 @@ export class baseHelper{
 
         // return value based on column and row
         return row?.getCell(rowcol).value
+    }
+
+    async writeRegisterToJson() {
+        interface Data {
+            firstname: string
+            lastname: string
+            email: string
+            phone: string
+            fax: string
+            company: string
+            address1: string
+            address2: string
+            city: string
+            state: string
+            zipcode: string
+            country: string
+            loginname: string
+            password: string
+        }
+
+        const data: Data = {
+            firstname: fakerEN.person.firstName(),
+            lastname: fakerEN.person.lastName(),
+            email: fakerEN.internet.email(),
+            phone: fakerEN.string.numeric({length: 12}),
+            fax: fakerEN.phone.number({style: 'national'}),
+            company: fakerEN.company.buzzAdjective(),
+            address1: fakerEN.location.streetAddress(),
+            address2: fakerEN.location.street(),
+            city: fakerEN.location.city(),
+            state: fakerEN_US.location.state(),
+            zipcode: fakerEN_US.location.zipCode(),
+            country: 'United States',
+            loginname: fakerEN.internet.username(),
+            password: fakerEN.internet.password()
+        }
+
+        this.firstname = data.firstname
+        this.lastname = data.lastname
+        this.email = data.email
+        this.phone = data.phone
+        this.company = data.company
+        this.address1 = data.address1
+        this.city = data.city
+        this.zipcode = data.zipcode
+        this.country = data.country
+        this.state = data.state
+        this.loginname = data.loginname
+        this.password = data.password
+
+        const jsonString = JSON.stringify(data, null, 2)
+        console.log(jsonString)
+
+        await fs.writeFile('test-data/userData.json', jsonString, (err) => {
+            if(err) {
+                console.log('error writing file:'. err)
+            } else {
+                console.log('success writing file!')
+            }
+        })
     }
 }

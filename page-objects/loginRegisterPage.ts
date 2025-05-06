@@ -44,7 +44,7 @@ export class loginRegisterPage extends baseHelper{
         this.registerRadio = page.locator('#accountFrm_accountregister')
         this.continueBtn = page.locator('button').getByText('Continue')
         this.loginText = page.locator('#loginFrm_loginname')
-        this.passwordText = page.locator('loginFrm_password')
+        this.passwordText = page.locator('#loginFrm_password')
         this.forgotPass = page.locator('.loginbox form-horizontal').getByRole('link', {name: 'Forgot your password?'})
         this.forgotLogin = page.locator('.loginbox form-horizontal').getByRole('link', {name: 'Forgot your login?'})
         this.loginBtn = page.getByRole('button', {name: 'Login'})
