@@ -46,19 +46,29 @@ test.describe('Cart page testing', ()=> {
         let itemNameVs = await pm.cart().cartNameGet(1)
         await expect (itemNameVs).toContain(itemName)
 
-        // update quantity of the item
-        await pm.cart().cartQtyUpdate(0,10)
+        // check the cart bar price's
+    let itemcartprice = await pm.cart().cartTotalGet(1)
+    await expect(itemcartprice).toEqual(totalPrice)
 
-        // assert total is correct
-        await expect(basePrice * 10).toEqual(await pm.cart().cartTotalGet(1))
+    // update quantity of the item
+    await pm.cart().cartQtyUpdate(0,10)
 
-        // set shipment
-        await pm.cart().cartCountrySelect('United States')
-        await pm.cart().cartStateSelect('Arizona')
-        await pm.cart().cartZipFill('95551')
-        await pm.cart().cartShipmentSelect(0)
+    // assert total is correct
+    await expect(basePrice * 10).toEqual(await pm.cart().cartTotalGet(1))
 
-        // check total price
-        await expect(pm.cart().cartGetSubtotal).toEqual(await pm.cart().cartTotalGet(1))
+    // set shipment
+    await pm.cart().cartCountrySelect('United States')
+    await pm.cart().cartStateSelect('Arizona')
+    await pm.cart().cartZipFill('95551')
+    await pm.cart().cartShipmentSelect(0)
+
+    // check total price table
+    let subtotal = await pm.cart().cartGetSubtotal()
+    let shiprate = await pm.cart().cartGetShipRate()
+    let retail = await pm.cart().cartGetRetail()
+    let total = await pm.cart().cartGetTotalPrice()
+
+    await expect(retail).toEqual(subtotal * 0.085)
+    await expect(total).toEqual(subtotal + shiprate + retail)
     })
 })
