@@ -19,7 +19,7 @@ test.describe('Register function test suite', () => {
         await page.waitForTimeout(2000)
     
         // generate test data from baseHelper
-        bh.generateRegisterData()
+        await bh.generateRegisterData()
     
         // filling the form
         await pm.lgn().regFirstName(bh.firstname)
@@ -37,6 +37,37 @@ test.describe('Register function test suite', () => {
         await pm.lgn().regPasswordConfirm(bh.password)
         await pm.lgn().regSubscribe(0)
         await pm.lgn().regPrivacyCheck()
+        await pm.lgn().continueBtnClick()
+    })
+
+    test('register with data from JSON', async({page}) => {
+        const pm = new pageManager(page)
+        const bh = new baseHelper(page)
+
+        // generate data from faker and put it to the json file
+        await bh.writeRegisterToJson()
+
+        // open registration form
+        await pm.lgn().continueBtnClick()
+
+        // filling the form
+        await pm.lgn().regFirstName(bh.firstname)
+        await pm.lgn().regLastName(bh.lastname)
+        await pm.lgn().regEmail(bh.email)
+        await pm.lgn().regTelephone(bh.phone)
+        await pm.lgn().regCompany(bh.company)
+        await pm.lgn().regAddress1(bh.address1)
+        await pm.lgn().regCity(bh.city)
+        await pm.lgn().regZipcode(bh.zipcode)
+        await pm.lgn().regCountrySelect(bh.country)
+        await pm.lgn().regStateSelect(bh.state)
+        await pm.lgn().regLoginname(bh.loginname)
+        await pm.lgn().regPassword(bh.password)
+        await pm.lgn().regPasswordConfirm(bh.password)
+        await pm.lgn().regSubscribe(0)
+        await pm.lgn().regPrivacyCheck()
+
+        await bh.waitForSeconds(5)
         await pm.lgn().continueBtnClick()
     })
 

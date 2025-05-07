@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { pageManager } from '../page-objects/pageManager'
 import { baseHelper } from '../page-objects/baseHelper'
-import { cartPage } from '../page-objects/cartPage'
 
 test.beforeEach(async({page}) => {
     await page.goto('https://automationteststore.com/', {timeout: 60000})
@@ -78,11 +77,41 @@ test.describe('Items Page Testing', ()=> {
         await pm.item().itemCartClick()
 
         // check on cart bar that the item is added
-        let itemNameVs = await pm.cart().cartNameGet(0)
+        let itemNameVs = await pm.cart().cartNameGet(1)
         await expect (itemName).toContain(itemNameVs)
 
         // check the cart bar price's
-        let itemcartprice = await pm.cart().cartTotalGet(0)
+        let itemcartprice = await pm.cart().cartTotalGet(1)
         await expect(itemcartprice * qty).toEqual(totalPrice)
+    })
+
+    test('add items from json file', async({page}) => {
+        const pm = new pageManager(page)
+        const bh = new baseHelper(page)
+
+        // initialize test data
+        const shoesData = JSON.parse(JSON.stringify(require('../test-data/productsList.json')))
+
+        // search for product
+        await pm.nav().searchBar(shoesData.Shoes[1].name)
+
+        // set the selection
+        await pm.item().itemComboSelect(shoesData.Shoes[1].size)
+
+        // let's compare price
+        let jsonprice = (shoesData.Shoes[1].price).replaceAll('$','')
+        expect(await pm.item().itemGetBasePrice()).toEqual(parseFloat(jsonprice))
+    })
+
+    test('getting data from excel sheets', async({page}) => {
+        const pm = new pageManager(page)
+        const bh = new baseHelper(page)
+
+        // set the test data
+        let itemname = await bh.getItemExcel(2, 1) // --> get shirts name
+
+        // search using the item name
+        //@ts-ignore
+        await pm.nav().searchBar(itemname)
     })
 })
