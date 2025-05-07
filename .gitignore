@@ -8,3 +8,4 @@ node_modules/
 /test-examples/
 /tests/example.spec.ts
 /tests/playground.spec.ts
+/test-data/userData.json
