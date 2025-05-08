@@ -5,6 +5,7 @@ import { homePage } from './homePage'
 import { itemPage } from './itemPage'
 import { cartPage } from './cartPage'
 import { forgotPage } from './forgotPage'
+import { checkoutPage } from './checkoutPage'
 
 export class pageManager{
 
@@ -15,6 +16,7 @@ export class pageManager{
     private readonly itemPage: itemPage
     private readonly cartPage: cartPage
     private readonly forgotPage: forgotPage
+    private readonly checkoutPage: checkoutPage
 
     constructor(page: Page) {
         this.page = page
@@ -24,6 +26,7 @@ export class pageManager{
         this.itemPage = new itemPage(this.page)
         this.cartPage = new cartPage(this.page)
         this.forgotPage = new forgotPage(this.page)
+        this.checkoutPage = new checkoutPage(this.page)
     }
 
     nav() {
@@ -48,6 +51,10 @@ export class pageManager{
 
     forgot() {
         return this.forgotPage
+    }
+    
+    checkout() {
+        return this.checkoutPage
     }
 
 }
